@@ -1,0 +1,203 @@
+/* ########################### الهوية البصرية الأساسية ########################### */
+
+/* الخطوط: استخدام خط عربي يدعم Google Fonts وخط احتياطي (serif/sans-serif) */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+:root {
+    /* اللون العنابي الأحمر الداكن كلون أساسي (Primary Color) */
+    --primary-color: #800020; /* عنابي داكن */
+    /* لون ثانوي لتفاصيل بارزة (Accent Color) */
+    --secondary-color: #ffc400; /* ذهبي/أصفر لتفاصيل العروض */
+    /* ألوان النصوص والخلفيات */
+    --text-color: #333;
+    --light-bg: #f8f8f8;
+    --dark-bg: #1a1a1a;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Cairo', sans-serif; /* استخدام خط القاهرة */
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: white;
+    direction: rtl; /* دعم اللغة العربية */
+    text-align: right;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+}
+
+/* ########################### الهيدر وقائمة التنقل ########################### */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%;
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.header a {
+    color: white;
+}
+
+.header .logo h1 {
+    font-size: 1.8em;
+}
+
+.header nav ul {
+    list-style: none;
+    display: flex;
+}
+
+.header nav ul li {
+    margin-right: 25px;
+}
+
+/* ########################### القسم الرئيسي (Hero) ########################### */
+.hero {
+    background-color: var(--light-bg);
+    padding: 60px 5%;
+    text-align: center;
+    border-bottom: 3px solid var(--secondary-color);
+}
+
+.hero h2 {
+    font-size: 2.5em;
+    color: var(--primary-color);
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    padding: 10px 20px;
+    margin-top: 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #ffd633;
+}
+
+.specials h3 {
+    margin-top: 30px;
+    color: #cc0000; /* أحمر بارز للعروض */
+}
+
+/* ########################### الأقسام العامة (Section Styles) ########################### */
+section {
+    padding: 40px 5%;
+}
+
+section h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+    border-bottom: 2px solid var(--secondary-color);
+    display: inline-block;
+    padding-bottom: 5px;
+    width: auto;
+    max-width: 90%;
+}
+
+/* ########################### قسم المنتجات (Product Grid) ########################### */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* تصميم شبكي مرن */
+    gap: 20px;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    transition: box-shadow 0.3s;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.product-card h3 {
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.price-info .old-price {
+    text-decoration: line-through;
+    color: #999;
+    margin-left: 10px;
+}
+
+.price-info .current-price {
+    font-size: 1.2em;
+    color: #cc0000; /* سعر البيع بلون أحمر */
+    font-weight: bold;
+}
+
+.product-card button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* ########################### الفوتر (Footer) ########################### */
+.footer {
+    background-color: var(--dark-bg);
+    color: white;
+    padding: 30px 5%;
+}
+
+.footer-sections {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+}
+
+.footer h3 {
+    color: var(--secondary-color);
+    margin-bottom: 15px;
+}
+
+.footer p, .footer ul li {
+    margin-bottom: 8px;
+}
+
+.footer a {
+    color: #ccc;
+}
+
+.footer a:hover {
+    color: white;
+}
+
+.copyright {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 0.8em;
+}
