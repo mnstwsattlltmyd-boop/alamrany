@@ -4,11 +4,356 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>العمراني للإلكترونيات | متجركم لأحدث الأجهزة</title>
-    <link rel="stylesheet" href="style.css">
     <meta name="description" content="العمراني للإلكترونيات - أفضل العروض على الهواتف الذكية، أجهزة الكمبيوتر المحمولة، الكاميرات والملحقات. جودة وضمان حقيقي.">
     <meta name="keywords" content="أفضل هاتف ذكي, سماعات بلوتوث رخيصة, العمراني للإلكترونيات, متجر إلكترونيات">
+    
+    <style>
+        /* ########################### الهوية البصرية الأساسية ########################### */
+
+        /* الخطوط: استخدام خط عربي يدعم Google Fonts وخط احتياطي (serif/sans-serif) */
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+
+        :root {
+            /* اللون العنابي الأحمر الداكن كلون أساسي (Primary Color) */
+            --primary-color: #800020; /* عنابي داكن */
+            /* لون ثانوي لتفاصيل بارزة (Accent Color) */
+            --secondary-color: #ffc400; /* ذهبي/أصفر لتفاصيل العروض */
+            /* ألوان النصوص والخلفيات */
+            --text-color: #333;
+            --light-bg: #f8f8f8;
+            --dark-bg: #1a1a1a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif; /* استخدام خط القاهرة */
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: white;
+            direction: rtl; /* دعم اللغة العربية */
+            text-align: right;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+        
+        /* ########################### الهيدر وقائمة التنقل ########################### */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 5%;
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .header a {
+            color: white;
+        }
+
+        .header .logo h1 {
+            font-size: 1.8em;
+        }
+
+        .header nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        .header nav ul li {
+            margin-right: 25px;
+        }
+
+        /* ########################### القسم الرئيسي (Hero) ########################### */
+        .hero {
+            background-color: var(--light-bg);
+            padding: 60px 5%;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary-color);
+        }
+
+        .hero h2 {
+            font-size: 2.5em;
+            color: var(--primary-color);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #ffd633;
+        }
+
+        .specials h3 {
+            margin-top: 30px;
+            color: #cc0000; /* أحمر بارز للعروض */
+        }
+
+        /* ########################### الأقسام العامة (Section Styles) ########################### */
+        section {
+            padding: 40px 5%;
+        }
+
+        section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+            border-bottom: 2px solid var(--secondary-color);
+            display: inline-block;
+            padding-bottom: 5px;
+            width: auto;
+            max-width: 90%;
+        }
+
+        /* ########################### قسم من نحن (About Us) ########################### */
+        .about-us p {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* ########################### قسم الفئات (Categories) ########################### */
+        .category-list {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .category-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        /* ########################### قسم المنتجات (Product Grid) ########################### */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* تصميم شبكي مرن */
+            gap: 20px;
+        }
+
+        .product-card {
+            border: 1px solid #ddd;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            transition: box-shadow 0.3s;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .product-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .product-card .sku, .product-card .description, .product-card .warranty, .product-card .availability {
+            margin-bottom: 5px;
+            font-size: 0.9em;
+        }
+
+        .product-card .availability.🔴 {
+            color: #cc0000;
+            font-weight: bold;
+        }
+        .product-card .availability.🟢 {
+            color: green;
+            font-weight: bold;
+        }
+
+        .price-info {
+            margin: 10px 0;
+        }
+
+        .price-info .old-price {
+            text-decoration: line-through;
+            color: #999;
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+
+        .price-info .current-price {
+            font-size: 1.2em;
+            color: #cc0000; /* سعر البيع بلون أحمر */
+            font-weight: bold;
+        }
+
+        .product-card button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            margin-top: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        
+        .product-card button:hover:not(:disabled) {
+            background-color: #a00030;
+        }
+        
+        .product-card button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* ########################### قسم السياسات (Policies) ########################### */
+        .policies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .policy-item {
+            padding: 20px;
+            border: 1px dashed #ccc;
+            border-radius: 8px;
+        }
+        
+        .policy-item h3 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        /* ########################### الفوتر (Footer) ########################### */
+        .footer {
+            background-color: var(--dark-bg);
+            color: white;
+            padding: 30px 5%;
+        }
+
+        .footer-sections {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #444;
+        }
+        
+        .footer-sections > div {
+            flex: 1;
+            min-width: 250px;
+            margin: 10px;
+        }
+
+        .footer h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer p, .footer ul li {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        .footer a {
+            color: #ccc;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            font-size: 0.8em;
+        }
+        
+        /* ########################### الاستجابة (Media Queries) ########################### */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header nav ul {
+                padding-top: 10px;
+                flex-direction: column;
+            }
+            
+            .header nav ul li {
+                margin: 5px 0;
+            }
+            
+            .hero {
+                padding: 40px 5%;
+            }
+
+            .hero h2 {
+                font-size: 2em;
+            }
+            
+            .product-grid, .policies-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-sections {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-sections > div {
+                margin-bottom: 20px;
+            }
+            
+            .footer-sections .legal-links ul {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+    </style>
 </head>
-<body>
+<body dir="rtl">
 
     <header class="header">
         <div class="logo">
@@ -77,7 +422,7 @@
                         <span class="current-price">ريال 1,999</span>
                     </div>
                     <p class="warranty">✅ ضمان سنتين</p>
-                    <p class="availability">🟢 متوفر في المخزون</p>
+                    <p class="availability 🟢">🟢 متوفر في المخزون</p>
                     <button>أضف للسلة</button>
                 </div>
                 
@@ -90,7 +435,7 @@
                         <span class="current-price">ريال 4,999</span>
                     </div>
                     <p class="warranty">✅ ضمان سنة</p>
-                    <p class="availability">🔴 نفذت الكمية</p>
+                    <p class="availability 🔴">🔴 نفذت الكمية</p>
                     <button disabled>غير متوفر</button>
                 </div>
             </div>
