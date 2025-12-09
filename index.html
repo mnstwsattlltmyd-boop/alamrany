@@ -1,513 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>العز فون للإلكترونيات | متجركم لأحدث الأجهزة</title>
-    <meta name="description" content="العز فون للإلكترونيات - صيانة الجوالات والأجهزة الكهربائية وتركيب أنظمة الطاقة الشمسية. جودة وضمان حقيقي.">
-    <meta name="keywords" content="صيانة جوالات, طاقة شمسية, أجهزة كهربائية, العز فون للإلكترونيات, متجر إلكترونيات">
-    
-    <style>
-        /* ########################### الهوية البصرية الأساسية ########################### */
-
-        /* الخطوط: استخدام خط عربي يدعم Google Fonts وخط احتياطي (serif/sans-serif) */
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
-
-        :root {
-            /* اللون العنابي الأحمر الداكن كلون أساسي (Primary Color) */
-            --primary-color: #800020; /* عنابي داكن */
-            /* لون ثانوي لتفاصيل بارزة (Accent Color) */
-            --secondary-color: #ffc400; /* ذهبي/أصفر لتفاصيل العروض */
-            /* ألوان النصوص والخلفيات */
-            --text-color: #333;
-            --light-bg: #f8f8f8;
-            --dark-bg: #1a1a1a;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            font-family: 'Cairo', sans-serif; /* استخدام خط القاهرة */
-            line-height: 1.6;
-            color: var(--text-color);
-            background-color: white;
-            direction: rtl; /* دعم اللغة العربية */
-            text-align: right;
-        }
-
-        a {
-            text-decoration: none;
-            color: var(--primary-color);
-        }
-        
-        /* ########################### الهيدر وقائمة التنقل ########################### */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 5%;
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .header a {
-            color: white;
-        }
-
-        .header .logo h1 {
-            font-size: 1.5em; /* تم تقليل حجم الخط ليتناسب مع الاسم الطويل */
-        }
-
-        .header nav ul {
-            list-style: none;
-            display: flex;
-        }
-
-        .header nav ul li {
-            margin-right: 25px;
-        }
-
-        /* ########################### القسم الرئيسي (Hero) ########################### */
-        .hero {
-            background-color: var(--light-bg);
-            padding: 60px 5%;
-            text-align: center;
-            border-bottom: 3px solid var(--secondary-color);
-        }
-
-        .hero h2 {
-            font-size: 2.5em;
-            color: var(--primary-color);
-            margin-bottom: 15px; /* مسافة أسفل العنوان */
-        }
-        
-        /* نمط الصورة المضافة في قسم Hero */
-        .hero .banner-image {
-            max-width: 900px; /* تحديد أقصى عرض مناسب */
-            width: 100%;
-            height: auto;
-            /* تم وضع الصورة هنا مباشرة فوق النص H2 في قسم Hero */
-            margin: 0 auto 30px auto; /* توسيط الصورة وإضافة مسافة سفلية أكبر */
-            display: block; /* لضمان تطبيق خاصية margin: auto */
-            border: 3px solid var(--primary-color); /* إطار جذاب */
-            border-radius: 10px;
-        }
-
-        .cta-button {
-            display: inline-block;
-            background-color: var(--secondary-color);
-            color: var(--text-color);
-            padding: 10px 20px;
-            margin-top: 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-
-        .cta-button:hover {
-            background-color: #ffd633;
-        }
-
-        .specials h3 {
-            margin-top: 30px;
-            color: #cc0000; /* أحمر بارز للعروض */
-        }
-
-        /* ########################### الأقسام العامة (Section Styles) ########################### */
-        section {
-            padding: 40px 5%;
-        }
-
-        section h2 {
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2em;
-            border-bottom: 2px solid var(--secondary-color);
-            display: inline-block;
-            padding-bottom: 5px;
-            width: auto;
-            max-width: 90%;
-        }
-
-        /* ########################### قسم من نحن (About Us) ########################### */
-        .about-us p {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        /* ########################### قسم الفئات (Categories) ########################### */
-        .category-list {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .category-card {
-            border: 1px solid #ddd;
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-            width: 300px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .category-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 5px;
-        }
-        
-        /* ########################### قسم المنتجات (Product Grid) ########################### */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* تصميم شبكي مرن */
-            gap: 20px;
-        }
-
-        .product-card {
-            border: 1px solid #ddd;
-            padding: 20px;
-            text-align: center;
-            border-radius: 8px;
-            transition: box-shadow 0.3s;
-        }
-
-        .product-card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .product-card img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-
-        .product-card h3 {
-            color: var(--primary-color);
-            margin-bottom: 5px;
-        }
-        
-        .product-card .sku, .product-card .description, .product-card .warranty, .product-card .availability {
-            margin-bottom: 5px;
-            font-size: 0.9em;
-        }
-
-        .product-card .availability.🔴 {
-            color: #cc0000;
-            font-weight: bold;
-        }
-        .product-card .availability.🟢 {
-            color: green;
-            font-weight: bold;
-        }
-
-        .price-info {
-            margin: 10px 0;
-        }
-
-        .price-info .old-price {
-            text-decoration: line-through;
-            color: #999;
-            margin-left: 10px;
-            font-size: 0.9em;
-        }
-
-        .price-info .current-price {
-            font-size: 1.2em;
-            color: #cc0000; /* سعر البيع بلون أحمر */
-            font-weight: bold;
-        }
-
-        .product-card button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            margin-top: 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.3s;
-        }
-        
-        .product-card button:hover:not(:disabled) {
-            background-color: #a00030;
-        }
-        
-        .product-card button:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        /* ########################### قسم السياسات (Policies) ########################### */
-        .policies-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            text-align: center;
-        }
-        
-        .policy-item {
-            padding: 20px;
-            border: 1px dashed #ccc;
-            border-radius: 8px;
-        }
-        
-        .policy-item h3 {
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
-
-        /* ########################### الفوتر (Footer) ########################### */
-        .footer {
-            background-color: var(--dark-bg);
-            color: white;
-            padding: 30px 5%;
-        }
-
-        .footer-sections {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #444;
-        }
-        
-        .footer-sections > div {
-            flex: 1;
-            min-width: 250px;
-            margin: 10px;
-        }
-
-        .footer h3 {
-            color: var(--secondary-color);
-            margin-bottom: 15px;
-            font-size: 1.2em;
-        }
-
-        .footer ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .footer p, .footer ul li {
-            margin-bottom: 8px;
-            font-size: 0.95em;
-        }
-
-        .footer a {
-            color: #ccc;
-        }
-
-        .footer a:hover {
-            color: white;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 20px;
-            font-size: 0.8em;
-        }
-        
-        /* ########################### الاستجابة (Media Queries) ########################### */
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .header nav ul {
-                padding-top: 10px;
-                flex-direction: column;
-            }
-            
-            .header nav ul li {
-                margin: 5px 0;
-            }
-            
-            .hero {
-                padding: 40px 5%;
-            }
-
-            .hero h2 {
-                font-size: 2em;
-            }
-            
-            .product-grid, .policies-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-sections {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .footer-sections > div {
-                margin-bottom: 20px;
-            }
-            
-            .footer-sections .legal-links ul {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-        
-    </style>
-</head>
-<body dir="rtl">
-
-    <header class="header">
-        <div class="logo">
-            <h1>العز فون للإلكترونيات وصيانة الجوالات والأجهزة الكهربائية</h1>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">الرئيسية</a></li>
-                <li><a href="#products">المنتجات</a></li>
-                <li><a href="#">من نحن</a></li>
-                <li><a href="#">الأسئلة الشائعة</a></li>
-                <li><a href="967735334165">اتصل بنا</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section id="hero" class="hero">
-            <img src="00.jpg" alt="العز فون للإلكترونيات وصيانة الجوالات والكهربائيات والطاقة الشمسية" class="banner-image">
-            
-            <h2>مرحباً بكم في العز فون للإلكترونيات</h2>
-            
-            <p>اكتشف أحدث التقنيات وأفضل الأجهزة بضمانات حقيقية وأسعار لا تقبل المنافسة.</p>
-            <a href="#products" class="cta-button">تصفح المنتجات الآن</a>
-            <div class="specials">
-                <h3>🔥 عروض خاصة هذا الأسبوع 🔥</h3>
-            </div>
-        </section>
-
-        <section id="about-us" class="about-us">
-            <h2>قصتنا ورؤيتنا</h2>
-            <p>
-                نحن في **العز فون للإلكترونيات** نسعى لتقديم أحدث المنتجات الإلكترونية الأصلية لعملائنا، بالإضافة إلى خدمات **صيانة الجوالات والأجهزة الكهربائية وتركيب أنظمة الطاقة الشمسية**. 
-                <br>
-                **رؤيتنا:** أن نكون المتجر الإلكتروني الأول الموثوق في المنطقة.
-                <br>
-                **رسالتنا:** نوفر قيمة حقيقية من خلال الجودة، الضمان، وخدمة العملاء الممتازة.
-            </p>
-        </section>
-
-        <section id="categories" class="categories">
-            <h2>🛒 تسوق حسب الفئة</h2>
-            <div class="category-list">
-                <div class="category-card">
-                    <h3>الهواتف الذكية</h3>
-                    <p>أحدث إصدارات أبل وسامسونج و شاومي</p>
-                </div>
-                <div class="category-card">
-                    <h3>أجهزة الكمبيوتر المحمولة</h3>
-                    <p>أجهزة للمحترفين واللاعبين</p>
-                </div>
-                <div class="category-card">
-                    <h3>خدمات الصيانة</h3>
-                    <p>صيانة متخصصة للجوالات والأجهزة الكهربائية</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="products" class="products">
-            <h2>✨ منتجاتنا المميزة ✨</h2>
-            <div class="product-grid">
-                <div class="product-card">
-                    <img src="product-image-1.jpg" alt="اسم المنتج الأول">
-                    <h3>هاتف جالاكسي A5000</h3>
-                    <p class="sku">SKU: A5000-XYZ</p>
-                    <p class="description">وصف موجز للمنتج: شاشة OLED، معالج سنابدراجون، ذاكرة 8GB.</p>
-                    <div class="price-info">
-                        <span class="old-price">ريال 2,500</span>
-                        <span class="current-price">ريال 1,999</span>
-                    </div>
-                    <p class="warranty">✅ ضمان سنتين</p>
-                    <p class="availability 🟢">🟢 متوفر في المخزون</p>
-                    <button>أضف للسلة</button>
-                </div>
-                
-                <div class="product-card">
-                    <img src="product-image-2.jpg" alt="اسم المنتج الثاني">
-                    <h3>لابتوب الأداء العالي X20</h3>
-                    <p class="sku">SKU: LAP-X20-PRO</p>
-                    <p class="description">لابتوب بمعالج i7 وكرت شاشة مخصص للألعاب والتصميم.</p>
-                    <div class="price-info">
-                        <span class="current-price">ريال 4,999</span>
-                    </div>
-                    <p class="warranty">✅ ضمان سنة</p>
-                    <p class="availability 🔴">🔴 نفذت الكمية</p>
-                    <button disabled>غير متوفر</button>
-                </div>
-            </div>
-        </section>
-
-        <section id="policies" class="policies">
-            <h2>🛡️ ثقة وأمان في عملياتك 🛡️</h2>
-            <div class="policies-grid">
-                <div class="policy-item">
-                    <h3>طرق الدفع المتاحة</h3>
-                    <p>بطاقات ائتمانية (فيزا/ماستركارد)، مدى، الدفع عند الاستلام.</p>
-                </div>
-                <div class="policy-item">
-                    <h3>سياسة الشحن</h3>
-                    <p>الشحن لجميع مدن الجمهوية. تكلفة ثابتة 30 ريال. التوصيل خلال 3-7 أيام عمل.</p>
-                    <a href="shipping.html">تفاصيل الشحن والتوصيل</a>
-                </div>
-                <div class="policy-item">
-                    <h3>الاستبدال والإرجاع</h3>
-                    <p>استبدال أو إرجاع خلال 14 يوماً من تاريخ الشراء، وفقاً لشروط محددة.</p>
-                    <a href="returns.html">سياسة الإرجاع</a>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="footer-sections">
-            <div class="contact-info">
-                <h3>تواصل معنا</h3>
-                <p>📍_ العنوان: تعز، _ الحيمة _ سوق الساعه _ خط الحيمة والزواقر  ،  </p>
-                <p>📞هاتف:967735334165+</p>   
-                
-            </div>
-
-            <div class="legal-links">
-                <h3>روابط مهمة</h3>
-                <ul>
-                    <li><a href="#">الشروط والأحكام</a></li>
-                    <li><a href="#">سياسة الخصوصية</a></li>
-                    <li><a href="#">خريطة الموقع</a></li>
-                </ul>
-            </div>
-            
-            <div class="social-media">
-                <h3>تابعنا</h3>
-                
-                |
-                <a href="https://wa.me/967735344165">واتساب</a>
-                |
-            </div>
-        </div>
-        <div class="copyright">
-            <p>&copy; 2025 العز فون للإلكترونيات. جميع الحقوق محفوظة.</p>
-        </div>
-    </footer>
-
-</body>
-</html>
