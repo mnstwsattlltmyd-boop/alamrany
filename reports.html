@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقارير والإحصائيات</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">إدارة المتجر</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="orders.html">الطلبات</a></li>
+                    <li><a href="products.html">المنتجات</a></li>
+                    <li class="active"><a href="reports.html">التقارير</a></li>
+                    <li><a href="marketing.html">التسويق</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>📊 نظرة عامة على أداء المتجر</h2>
+            </header>
+
+            <section class="controls-bar">
+                <select id="timeRangeSelector">
+                    <option value="today">اليوم</option>
+                    <option value="last_week">آخر 7 أيام</option>
+                    <option value="last_month" selected>آخر 30 يومًا</option>
+                    <option value="custom">تحديد مخصص</option>
+                </select>
+                <input type="date" id="startDate" class="date-input">
+                <input type="date" id="endDate" class="date-input">
+                <button class="filter-btn">تطبيق</button>
+            </section>
+            
+            <section class="kpi-cards-container">
+                <div class="kpi-card revenue">
+                    <span class="kpi-value" id="kpi-revenue">5,890.00 رس</span>
+                    <span class="kpi-label">إجمالي الإيرادات</span>
+                    <span class="kpi-change up" id="kpi-revenue-change">↑ 15%</span>
+                </div>
+                <div class="kpi-card orders">
+                    <span class="kpi-value" id="kpi-orders">124</span>
+                    <span class="kpi-label">عدد الطلبات</span>
+                    <span class="kpi-change down" id="kpi-orders-change">↓ 5%</span>
+                </div>
+                <div class="kpi-card visitors">
+                    <span class="kpi-value" id="kpi-visitors">2,100</span>
+                    <span class="kpi-label">الزوار</span>
+                    <span class="kpi-change up" id="kpi-visitors-change">↑ 22%</span>
+                </div>
+                <div class="kpi-card conversion">
+                    <span class="kpi-value" id="kpi-conversion">5.9%</span>
+                    <span class="kpi-label">معدل التحويل</span>
+                    <span class="kpi-change up" id="kpi-conversion-change">↑ 0.5 نقطة</span>
+                </div>
+            </section>
+
+            <section class="charts-section">
+                <div class="main-chart-card">
+                    <h3>الإيرادات اليومية والاتجاه العام</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="side-report-card">
+                    <h3>المنتجات الأكثر مبيعاً</h3>
+                    <ul class="top-selling-list" id="top-selling-list">
+                        <li><p style="text-align: center;">جاري التحميل...</p></li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script> 
+
+    <script>
+        // ⚠️ مفاتيح مشروعك "osama-alqisee"
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNQ7YzUxzveUorMgHraMii7C5uZ-K8b6s",
+            authDomain: "osama-alqisee.firebaseapp.com",
+            projectId: "osama-alqisee",
+            storageBucket: "osama-alqisee.firebasestorage.app",
+            messagingSenderId: "689498064354",
+            appId: "1:689498064354:web:956a072dd4e9ee99f2e5bb",
+            measurementId: "G-F8GL8K46W5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        firebase.analytics();
+        
+        // متغير عالمي لتخزين نسخة من كائن الرسم البياني
+        let revenueChart = null; 
+    </script>
+
+    <script>
+        const topSellingList = document.getElementById('top-selling-list');
+        const kpiElements = {
+            revenue: document.getElementById('kpi-revenue'),
+            orders: document.getElementById('kpi-orders'),
+            visitors: document.getElementById('kpi-visitors'),
+            conversion: document.getElementById('kpi-conversion'),
+            revenueChange: document.getElementById('kpi-revenue-change'),
+            ordersChange: document.getElementById('kpi-orders-change'),
+            visitorsChange: document.getElementById('kpi-visitors-change'),
+            conversionChange: document.getElementById('kpi-conversion-change'),
+        };
+
+        // ********************************************************
+        // 1. وظائف جلب البيانات من Firestore
+        // ********************************************************
+
+        async function fetchReportData() {
+            try {
+                // افتراض: جلب الإحصائيات الرئيسية من مستند تقرير (Report Document)
+                const kpiDoc = await db.collection("reports").doc("monthly_summary").get();
+                if (kpiDoc.exists) {
+                    const data = kpiDoc.data();
+                    updateKPIs(data);
+                } else {
+                    console.warn("لم يتم العثور على مستند التقرير. استخدام بيانات وهمية.");
+                    // استخدام بيانات وهمية مؤقتاً في حالة عدم وجود المستند
+                }
+                
+                // جلب بيانات الرسم البياني والمنتجات الأكثر مبيعاً
+                const chartAndProductsDoc = await db.collection("reports").doc("sales_performance").get();
+                if (chartAndProductsDoc.exists) {
+                    const data = chartAndProductsDoc.data();
+                    renderRevenueChart(data.chartData || { labels: [], data: [] });
+                    renderTopSellingProducts(data.topProducts || []);
+                } else {
+                    renderRevenueChart({ labels: [], data: [] });
+                    renderTopSellingProducts([]);
+                }
+                
+
+            } catch (error) {
+                console.error("❌ خطأ في جلب بيانات التقارير:", error);
+                // رسالة خطأ واضحة
+                document.getElementById('kpi-revenue').textContent = 'خطأ في التحميل';
+            }
+        }
+
+        // ********************************************************
+        // 2. وظائف تحديث الواجهة
+        // ********************************************************
+        
+        function updateKPIs(data) {
+            // تحديث القيم الرئيسية
+            kpiElements.revenue.textContent = (data.revenue || 0).toLocaleString() + ' رس';
+            kpiElements.orders.textContent = (data.orders || 0).toLocaleString();
+            kpiElements.visitors.textContent = (data.visitors || 0).toLocaleString();
+            kpiElements.conversion.textContent = (data.conversion || 0).toFixed(1) + '%';
+
+            // تحديث التغيرات (Change Indicators)
+            // (هذه الوظيفة تحتاج إلى منطق لتحليل قيمة التغير وتطبيق الكلاس up/down)
+            
+            // مثال على تحديث مؤشر التغير
+            const changeRevenue = data.changeRevenue || 0.15; // 15%
+            const changeOrders = data.changeOrders || -0.05; // -5%
+
+            kpiElements.revenueChange.textContent = `${changeRevenue > 0 ? '↑' : '↓'} ${Math.abs(changeRevenue * 100).toFixed(0)}%`;
+            kpiElements.revenueChange.className = `kpi-change ${changeRevenue > 0 ? 'up' : 'down'}`;
+
+            kpiElements.ordersChange.textContent = `${changeOrders > 0 ? '↑' : '↓'} ${Math.abs(changeOrders * 100).toFixed(0)}%`;
+            kpiElements.ordersChange.className = `kpi-change ${changeOrders > 0 ? 'up' : 'down'}`;
+        }
+
+        function renderRevenueChart(chartDataFromFirestore) {
+            const chartData = {
+                labels: chartDataFromFirestore.labels,
+                datasets: [{
+                    label: 'إجمالي الإيرادات (رس)',
+                    data: chartDataFromFirestore.data,
+                    backgroundColor: 'rgba(56, 163, 165, 0.2)',
+                    borderColor: '#38a3a5',
+                    borderWidth: 2,
+                    tension: 0.4 
+                }]
+            };
+            
+            // تدمير الرسم البياني القديم قبل إنشاء الجديد
+            if (revenueChart) {
+                revenueChart.destroy();
+            }
+
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(ctx, {
+                type: 'line', 
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, 
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                            rtl: true
+                        },
+                        title: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true },
+                        x: { }
+                    }
+                }
+            });
+        }
+        
+        function renderTopSellingProducts(productsArray) {
+            topSellingList.innerHTML = ''; // مسح العناصر الوهمية
+            
+            if (productsArray.length === 0) {
+                topSellingList.innerHTML = '<li><p style="text-align: center;">لا توجد بيانات مبيعات حالياً.</p></li>';
+                return;
+            }
+            
+            productsArray.forEach((product, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `${index + 1}. ${product.name} <span class="amount">${(product.amount || 0).toLocaleString()} رس</span>`;
+                topSellingList.appendChild(li);
+            });
+        }
+        
+        // ********************************************************
+        // 3. تشغيل الوظائف
+        // ********************************************************
+
+        fetchReportData();
+
+        // --------------------------------------------------------
+        // ملاحظة: فلترة التاريخ
+        // --------------------------------------------------------
+        // يجب إضافة مستمع حدث لزر 'تطبيق' و select 'timeRangeSelector' 
+        // لاستدعاء fetchReportData(timeRange) مع نطاق زمني جديد 
+        // لإعادة جلب البيانات المفلترة من Firestore.
+    </script>
+</body>
+</html>

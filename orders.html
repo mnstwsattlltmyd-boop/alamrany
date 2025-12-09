@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الطلبات</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">إدارة المتجر</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li class="active"><a href="orders.html">الطلبات</a></li>
+                    <li><a href="products.html">المنتجات</a></li>
+                    <li><a href="reports.html">التقارير</a></li>
+                    <li><a href="marketing.html">التسويق</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>📦 إدارة الطلبات</h2>
+            </header>
+
+            <section class="orders-filter-status">
+                <div class="status-tabs" id="status-tabs-container">
+                    <span class="status-tab active-status" data-status="all">الكل (0)</span>
+                    <span class="status-tab" data-status="pending">قيد المراجعة (0)</span>
+                    <span class="status-tab" data-status="processing">قيد التجهيز (0)</span>
+                    <span class="status-tab" data-status="shipped">جاري الشحن (0)</span>
+                    <span class="status-tab" data-status="completed">مكتملة (0)</span>
+                </div>
+                <input type="text" placeholder="ابحث برقم الطلب أو اسم العميل..." class="search-orders-input">
+            </section>
+
+            <section class="orders-table-card">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>العميل</th>
+                                <th>المبلغ الإجمالي</th>
+                                <th>تاريخ الطلب</th>
+                                <th>الحالة</th>
+                                <th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-table-body">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-analytics.js"></script> 
+
+    <script>
+        // ⚠️ مهم: تم استخدام مفاتيحك الخاصة بمشروع "osama-alqisee"
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNQ7YzUxzveUorMgHraMii7C5uZ-KK8b6s",
+            authDomain: "osama-alqisee.firebaseapp.com",
+            projectId: "osama-alqisee",
+            storageBucket: "osama-alqisee.firebasestorage.app",
+            messagingSenderId: "689498064354",
+            appId: "1:689498064354:web:956a072dd4e9ee99f2e5bb",
+            measurementId: "G-F8GL8K46W5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        firebase.analytics();
+        
+        // متغير عالمي لتخزين جميع بيانات الطلبات (لتسهيل الفلترة دون إعادة الجلب)
+        let allOrdersData = [];
+    </script>
+
+    <script>
+        const ordersTableBody = document.getElementById('orders-table-body');
+        const statusTabs = document.querySelectorAll('.status-tab');
+        
+        // ------------------------------------------------------------------
+        // * وظائف جلب وعرض البيانات من Firebase
+        // ------------------------------------------------------------------
+
+        // دالة مساعدة لبناء صف الطلب
+        function buildOrderRow(orderData, orderId) {
+            const row = document.createElement('tr');
+            
+            // تحديد الحالة المناسبة
+            let statusText = orderData.statusText || 'غير محدد';
+            let statusClass = 'default-badge';
+            
+            if (orderData.status === 'pending') statusClass = 'pending-badge';
+            else if (orderData.status === 'processing') statusClass = 'processing-badge';
+            else if (orderData.status === 'shipped') statusClass = 'shipped-badge';
+            else if (orderData.status === 'completed') statusClass = 'completed-badge';
+            
+            const orderDate = orderData.createdAt 
+                ? orderData.createdAt.toDate().toLocaleDateString('ar-EG') 
+                : 'غير محدد';
+
+            row.setAttribute('data-status', orderData.status);
+            
+            row.innerHTML = `
+                <td data-label="رقم الطلب">#${orderId.substring(0, 5).toUpperCase()}</td>
+                <td data-label="العميل">${orderData.customerName || 'عميل مجهول'}</td>
+                <td data-label="المبلغ">${(orderData.totalAmount || 0).toFixed(2)} رس</td>
+                <td data-label="التاريخ">${orderDate}</td>
+                <td data-label="الحالة">
+                    <span class="status-badge ${statusClass}">${statusText}</span>
+                </td>
+                <td data-label="الإجراء">
+                    <a href="order_details.html?id=${orderId}" class="action-btn view-btn">عرض التفاصيل</a> 
+                </td>
+            `;
+            return row;
+        }
+
+        // وظيفة جلب وعرض الطلبات من Firestore
+        async function fetchAndRenderOrders() {
+            ordersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">جاري تحميل الطلبات...</td></tr>';
+
+            try {
+                const snapshot = await db.collection("orders").orderBy("createdAt", "desc").get();
+                
+                // مسح الجدول القديم وتفريغ بيانات الفلترة القديمة
+                ordersTableBody.innerHTML = ''; 
+                allOrdersData = [];
+
+                if (snapshot.empty) {
+                    ordersTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">لا توجد طلبات حالياً.</td></tr>';
+                    // تحديث عدادات التبويبات إلى 0
+                    updateStatusCounts(0, 0, 0, 0, 0); 
+                    return;
+                }
+
+                let counts = { all: 0, pending: 0, processing: 0, shipped: 0, completed: 0 };
+                
+                snapshot.forEach(doc => {
+                    const orderData = doc.data();
+                    const orderId = doc.id;
+                    
+                    // تخزين البيانات في المتغير العام للفلترة اللاحقة
+                    allOrdersData.push({ id: orderId, ...orderData });
+                    
+                    // تحديث العدّاد
+                    counts.all++;
+                    if (counts.hasOwnProperty(orderData.status)) {
+                        counts[orderData.status]++;
+                    }
+                    
+                    const newRow = buildOrderRow(orderData, orderId);
+                    ordersTableBody.appendChild(newRow);
+                });
+                
+                // تحديث عدادات التبويبات
+                updateStatusCounts(counts.all, counts.pending, counts.processing, counts.shipped, counts.completed);
+
+            } catch (error) {
+                console.error("❌ خطأ في جلب الطلبات من Firestore: ", error);
+                ordersTableBody.innerHTML = `<tr><td colspan="6" style="color: red; text-align: center;">فشل تحميل الطلبات.</td></tr>`;
+            }
+        }
+        
+        // ------------------------------------------------------------------
+        // * وظيفة تحديث عدادات التبويبات
+        // ------------------------------------------------------------------
+
+        function updateStatusCounts(all, pending, processing, shipped, completed) {
+            statusTabs.forEach(tab => {
+                const status = tab.getAttribute('data-status');
+                let count = 0;
+                if (status === 'all') count = all;
+                else if (status === 'pending') count = pending;
+                else if (status === 'processing') count = processing;
+                else if (status === 'shipped') count = shipped;
+                else if (status === 'completed') count = completed;
+
+                tab.textContent = `${tab.textContent.split('(')[0].trim()} (${count})`;
+            });
+        }
+
+        // ------------------------------------------------------------------
+        // * وظيفة فلترة الطلبات (تعتمد على الصفوف الموجودة فعلياً)
+        // ------------------------------------------------------------------
+        
+        // 2. إضافة مستمعي الحدث (Event Listeners) لكل تبويب
+        statusTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // أ. إزالة التفعيل من جميع التبويبات وإضافته للتبويب الحالي
+                statusTabs.forEach(t => t.classList.remove('active-status'));
+                this.classList.add('active-status');
+
+                // ب. الحصول على حالة الطلب المراد فلترتها
+                const selectedStatus = this.getAttribute('data-status');
+                
+                // ج. تطبيق الفلترة على صفوف الجدول (الصفوف التي تم تحميلها بالفعل)
+                filterOrdersByStatus(selectedStatus);
+            });
+        });
+
+        // 3. وظيفة الفلترة الرئيسية
+        function filterOrdersByStatus(status) {
+            // استهداف جميع صفوف الطلبات في الجدول
+            const orderRows = ordersTableBody.querySelectorAll('tr'); 
+            
+            orderRows.forEach(row => {
+                const rowStatus = row.getAttribute('data-status');
+
+                if (status === 'all' || rowStatus === status) {
+                    row.style.display = ''; // عرض الصف
+                } else {
+                    row.style.display = 'none'; // إخفاء الصف
+                }
+            });
+        }
+
+        // 4. تشغيل الدالة عند تحميل الصفحة
+        fetchAndRenderOrders();
+    </script>
+</body>
+</html>
