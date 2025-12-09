@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التقارير والإحصائيات</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">إدارة المتجر</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="#">الطلبات</a></li>
+                    <li><a href="products.html">المنتجات</a></li>
+                    <li class="active"><a href="#">التقارير</a></li>
+                    <li><a href="#">التسويق</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>📊 نظرة عامة على أداء المتجر</h2>
+            </header>
+
+            <section class="controls-bar">
+                <select id="timeRangeSelector">
+                    <option value="today">اليوم</option>
+                    <option value="last_week">آخر 7 أيام</option>
+                    <option value="last_month" selected>آخر 30 يومًا</option>
+                    <option value="custom">تحديد مخصص</option>
+                </select>
+                <input type="date" id="startDate" class="date-input">
+                <input type="date" id="endDate" class="date-input">
+                <button class="filter-btn">تطبيق</button>
+            </section>
+            
+            <section class="kpi-cards-container">
+                <div class="kpi-card revenue">
+                    <span class="kpi-value">5,890.00 رس</span>
+                    <span class="kpi-label">إجمالي الإيرادات</span>
+                    <span class="kpi-change up">↑ 15%</span>
+                </div>
+                <div class="kpi-card orders">
+                    <span class="kpi-value">124</span>
+                    <span class="kpi-label">عدد الطلبات</span>
+                    <span class="kpi-change down">↓ 5%</span>
+                </div>
+                <div class="kpi-card visitors">
+                    <span class="kpi-value">2,100</span>
+                    <span class="kpi-label">الزوار</span>
+                    <span class="kpi-change up">↑ 22%</span>
+                </div>
+                <div class="kpi-card conversion">
+                    <span class="kpi-value">5.9%</span>
+                    <span class="kpi-label">معدل التحويل</span>
+                    <span class="kpi-change up">↑ 0.5 نقطة</span>
+                </div>
+            </section>
+
+            <section class="charts-section">
+                <div class="main-chart-card">
+                    <h3>الإيرادات اليومية والاتجاه العام</h3>
+                    <div class="chart-container">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="side-report-card">
+                    <h3>المنتجات الأكثر مبيعاً</h3>
+                    <ul class="top-selling-list">
+                        <li>1. ساعة هيرفو <span class="amount">1,500 رس</span></li>
+                        <li>2. فستان سهرة <span class="amount">1,120 رس</span></li>
+                        <li>3. عطر الورد <span class="amount">890 رس</span></li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        // إعداد بيانات الرسم البياني
+        const chartData = {
+            labels: ['الأسبوع 1', 'الأسبوع 2', 'الأسبوع 3', 'الأسبوع 4'],
+            datasets: [{
+                label: 'إجمالي الإيرادات (رس)',
+                data: [1200, 1900, 3000, 5890],
+                backgroundColor: 'rgba(56, 163, 165, 0.2)', // لون التعبئة
+                borderColor: '#38a3a5', // لون الخط (نفس primary-color)
+                borderWidth: 2,
+                tension: 0.4 
+            }]
+        };
+
+        // إعداد الرسم البياني
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        const revenueChart = new Chart(ctx, {
+            type: 'line', 
+            data: chartData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, 
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        rtl: true // دعم اللغة العربية في أسطورة الرسم البياني
+                    },
+                    title: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    },
+                    x: {
+                         // لضمان عرض المحور السيني بشكل صحيح في RTL
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الطلبات</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">إدارة المتجر</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li class="active"><a href="orders.html">الطلبات</a></li>
+                    <li><a href="products.html">المنتجات</a></li>
+                    <li><a href="reports.html">التقارير</a></li>
+                    <li><a href="marketing.html">التسويق</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>📦 إدارة الطلبات</h2>
+            </header>
+
+            <section class="orders-filter-status">
+                <div class="status-tabs">
+                    <span class="status-tab active-status" data-status="all">الكل (120)</span>
+                    <span class="status-tab" data-status="pending">قيد المراجعة (15)</span>
+                    <span class="status-tab" data-status="processing">قيد التجهيز (40)</span>
+                    <span class="status-tab" data-status="shipped">جاري الشحن (50)</span>
+                    <span class="status-tab" data-status="completed">مكتملة (15)</span>
+                </div>
+                <input type="text" placeholder="ابحث برقم الطلب أو اسم العميل..." class="search-orders-input">
+            </section>
+
+            <section class="orders-table-card">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>العميل</th>
+                                <th>المبلغ الإجمالي</th>
+                                <th>تاريخ الطلب</th>
+                                <th>الحالة</th>
+                                <th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-status="pending">
+                                <td data-label="رقم الطلب">#12345</td>
+                                <td data-label="العميل">محمد فهد</td>
+                                <td data-label="المبلغ">1,250 رس</td>
+                                <td data-label="التاريخ">2025/12/08</td>
+                                <td data-label="الحالة">
+                                    <span class="status-badge pending-badge">قيد المراجعة</span>
+                                </td>
+                                <td data-label="الإجراء">
+                                    <a href="order_details.html?id=12345" class="action-btn view-btn">عرض التفاصيل</a> 
+
+                                </td>
+                            </tr>
+                            <tr data-status="shipped">
+                                <td data-label="رقم الطلب">#12344</td>
+                                <td data-label="العميل">سارة خالد</td>
+                                <td data-label="المبلغ">350 رس</td>
+                                <td data-label="التاريخ">2025/12/07</td>
+                                <td data-label="الحالة">
+                                    <span class="status-badge shipped-badge">جاري الشحن</span>
+                                </td>
+                                <td data-label="الإجراء">
+                                    <a href="order_details.html?id=12345" class="action-btn view-btn">عرض التفاصيل</a> 
+
+                                </td>
+                            </tr>
+                            <tr data-status="completed">
+                                <td data-label="رقم الطلب">#12343</td>
+                                <td data-label="العميل">علي المطيري</td>
+                                <td data-label="المبلغ">680 رس</td>
+                                <td data-label="التاريخ">2025/12/06</td>
+                                <td data-label="الحالة">
+                                    <span class="status-badge completed-badge">مكتمل</span>
+                                </td>
+                                <td data-label="الإجراء">
+                                    <a href="order_details.html?id=12345" class="action-btn view-btn">عرض التفاصيل</a> 
+
+                                </td>
+                            </tr>
+                            <tr data-status="processing">
+                                <td data-label="رقم الطلب">#12342</td>
+                                <td data-label="العميل">فاطمة ناصر</td>
+                                <td data-label="المبلغ">220 رس</td>
+                                <td data-label="التاريخ">2025/12/05</td>
+                                <td data-label="الحالة">
+                                    <span class="status-badge processing-badge">قيد التجهيز</span>
+                                </td>
+                                <td data-label="الإجراء">
+                                    <a href="order_details.html?id=12345" class="action-btn view-btn">عرض التفاصيل</a> 
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+        // 1. الحصول على جميع تبويبات الحالة وصفوف الجدول
+        const statusTabs = document.querySelectorAll('.status-tab');
+        const orderRows = document.querySelectorAll('tbody tr');
+
+        // 2. إضافة مستمعي الحدث (Event Listeners) لكل تبويب
+        statusTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                // أ. إزالة التفعيل من جميع التبويبات وإضافته للتبويب الحالي
+                statusTabs.forEach(t => t.classList.remove('active-status'));
+                this.classList.add('active-status');
+
+                // ب. الحصول على حالة الطلب المراد فلترتها
+                const selectedStatus = this.getAttribute('data-status');
+                
+                // ج. تطبيق الفلترة على صفوف الجدول
+                filterOrdersByStatus(selectedStatus);
+            });
+        });
+
+        // 3. وظيفة الفلترة الرئيسية
+        function filterOrdersByStatus(status) {
+            orderRows.forEach(row => {
+                const rowStatus = row.getAttribute('data-status');
+
+                if (status === 'all') {
+                    // إذا كانت الحالة هي "الكل"، نعرض جميع الصفوف
+                    row.style.display = ''; 
+                } else if (rowStatus === status) {
+                    // إذا كانت حالة الصف تطابق الحالة المحددة، نعرض الصف
+                    row.style.display = '';
+                } else {
+                    // خلاف ذلك، نخفي الصف
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        // **********************************************************
+        // ملاحظة: لإضافة وظيفة "عرض التفاصيل" (زر view-btn):
+        // سنحتاج إلى ربط هذا الزر بوظيفة JavaScript تفتح النافذة 
+        // المنبثقة (Modal) التي سنصممها لاحقًا في شاشة تفاصيل الطلب.
+        // **********************************************************
+
+    </script>
+</body>
+</html>

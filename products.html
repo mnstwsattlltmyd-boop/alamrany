@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة المنتجات</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">إدارة المتجر</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="orders.html">الطلبات</a></li>
+                    <li class="active"><a href="products.html">المنتجات</a></li>
+                    <li><a href="reports.html">التقارير</a></li>
+                    <li><a href="marketing.html">التسويق</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>إدارة المنتجات</h2>
+                <button class="add-product-btn">+ منتج جديد</button>
+            </header>
+
+            <section class="filter-bar">
+                <input type="text" placeholder="ابحث عن منتج...">
+                <select>
+                    <option value="all">جميع المنتجات</option>
+                    <option value="ready">منتجات جاهزة</option>
+                    <option value="services">خدمات</option>
+                </select>
+                <button class="filter-btn">تصفية</button>
+            </section>
+
+            <section class="products-list-container">
+                <div class="product-card">
+                    <div class="product-image-placeholder">صورة 1</div>
+                    <div class="product-details">
+                        <h4 class="product-name">ساعة رجالية هيرفو ووتش - A8</h4>
+                        <p class="product-price">399.05 رس</p>
+                        <div class="product-meta">
+                            <span>المخزون: **50** حبة</span> | <span>الحالة: **متوفر**</span>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="edit-btn">تعديل</button>
+                        <button class="delete-btn">حذف</button>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-image-placeholder">صورة 2</div>
+                    <div class="product-details">
+                        <h4 class="product-name">ساعة نسائية فاخرة - F12</h4>
+                        <p class="product-price">448.99 رس</p>
+                        <div class="product-meta">
+                            <span>المخزون: **34** حبة</span> | <span>الحالة: **قليل**</span>
+                        </div>
+                    </div>
+                    <div class="product-actions">
+                        <button class="edit-btn">تعديل</button>
+                        <button class="delete-btn">حذف</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <div id="addProductModal" class="modal-overlay">
+            <div class="modal-content">
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h3>إضافة منتج جديد</h3>
+                
+                <form class="product-form">
+                    <div class="form-group">
+                        <label for="productName">اسم المنتج:</label>
+                        <input type="text" id="productName" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="productPrice">السعر (رس):</label>
+                            <input type="number" id="productPrice" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group half-width">
+                            <label for="productStock">الكمية/المخزون:</label>
+                            <input type="number" id="productStock" min="0" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productDescription">الوصف:</label>
+                        <textarea id="productDescription" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productImage">صورة المنتج:</label>
+                        <input type="file" id="productImage" accept="image/*">
+                        <div class="image-upload-area">
+                            <p>انقر لرفع الصورة أو اسحبها هنا</p>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="closeModal()">إلغاء</button>
+                        <button type="submit" class="save-btn">حفظ المنتج</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // وظائف إظهار وإخفاء النافذة المنبثقة
+        function openModal() {
+            document.getElementById('addProductModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('addProductModal').style.display = 'none';
+            document.querySelector('.product-form').reset();
+        }
+
+        // ربط زر "منتج جديد" بوظيفة الفتح
+        document.querySelector('.add-product-btn').onclick = openModal;
+
+        // ----------------------------------------------------
+        // معالجة إرسال النموذج ومحاكاة حفظ البيانات
+        // ----------------------------------------------------
+
+        const productForm = document.querySelector('.product-form');
+
+        productForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // منع إعادة تحميل الصفحة
+            handleFormSubmission();
+        });
+
+        function handleFormSubmission() {
+            // جمع البيانات
+            const productName = document.getElementById('productName').value;
+            const productPrice = document.getElementById('productPrice').value;
+            const productStock = document.getElementById('productStock').value;
+            const productDescription = document.getElementById('productDescription').value;
+            const productImage = document.getElementById('productImage').files[0];
+            
+            const productData = {
+                name: productName,
+                price: parseFloat(productPrice),
+                stock: parseInt(productStock),
+                description: productDescription,
+                hasImage: productImage ? true : false
+            };
+
+            console.log("تم جمع البيانات بنجاح:", productData);
+
+            // محاكاة الإرسال
+            simulateSaveProduct(productData);
+        }
+
+        function simulateSaveProduct(data) {
+            console.log("جاري محاكاة إرسال البيانات إلى الخادم...");
+            
+            // محاكاة تأخير لمدة 1 ثانية
+            setTimeout(() => {
+                const success = true; 
+
+                if (success) {
+                    alert(`✅ تم حفظ المنتج "${data.name}" بنجاح!`);
+                    closeModal();
+                    // هنا يتم في التطبيق الحقيقي استدعاء وظيفة تحديث قائمة المنتجات
+                } else {
+                    alert("❌ فشل حفظ المنتج. يرجى المحاولة مرة أخرى.");
+                }
+            }, 1000); 
+        }
+
+    </script>
+</body>
+</html>

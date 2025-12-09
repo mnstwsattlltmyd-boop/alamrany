@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة التسويق والحملات</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">إدارة المتجر</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="orders.html">الطلبات</a></li>
+                    <li><a href="products.html">المنتجات</a></li>
+                    <li><a href="reports.html">التقارير</a></li>
+                    <li class="active"><a href="marketing.html">التسويق</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>📣 إدارة الحملات التسويقية</h2>
+                <button class="add-campaign-btn" onclick="openCampaignModal()">+ حملة جديدة</button>
+            </header>
+
+            <section class="campaign-tabs-bar">
+                <span class="campaign-tab active-tab" data-type="all">الكل (11)</span>
+                <span class="campaign-tab" data-type="active">النشطة (3)</span>
+                <span class="campaign-tab" data-type="scheduled">المجدولة (1)</span>
+                <span class="campaign-tab" data-type="finished">المنتهية (7)</span>
+                <span class="campaign-tab" data-type="coupons">أكواد الخصم</span>
+            </section>
+
+            <section class="campaigns-table-card">
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم الحملة/الكود</th>
+                                <th>النوع</th>
+                                <th>تاريخ الانتهاء</th>
+                                <th>الحالة</th>
+                                <th>الأداء (الإيرادات)</th>
+                                <th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-type="active">
+                                <td data-label="اسم الحملة">تخفيضات نهاية العام 2025</td>
+                                <td data-label="النوع">خصم مباشر</td>
+                                <td data-label="تاريخ الانتهاء">2025/12/31</td>
+                                <td data-label="الحالة">
+                                    <span class="status-badge completed-badge">نشط</span>
+                                </td>
+                                <td data-label="الأداء">15,000 رس</td>
+                                <td data-label="الإجراء">
+                                    <button class="action-btn edit-btn">تعديل</button>
+                                    <button class="action-btn stop-btn">إيقاف</button>
+                                </td>
+                            </tr>
+                            <tr data-type="scheduled">
+                                <td data-label="اسم الحملة">تخفيض العيد الوطني</td>
+                                <td data-label="النوع">خصم مباشر</td>
+                                <td data-label="تاريخ الانتهاء">2026/02/23</td>
+                                <td data-label="الحالة">
+                                    <span class="status-badge pending-badge">مجدول</span>
+                                </td>
+                                <td data-label="الأداء">--</td>
+                                <td data-label="الإجراء">
+                                    <button class="action-btn edit-btn">تعديل</button>
+                                    <button class="action-btn delete-btn">حذف</button>
+                                </td>
+                            </tr>
+                            <tr data-type="finished">
+                                <td data-label="اسم الحملة">إطلاق مجموعة الربيع</td>
+                                <td data-label="النوع">إعلانات ممولة</td>
+                                <td data-label="تاريخ الانتهاء">2025/04/15</td>
+                                <td data-label="الحالة">
+                                    <span class="status-badge default-badge">منتهٍ</span>
+                                </td>
+                                <td data-label="الأداء">4,500 رس</td>
+                                <td data-label="الإجراء">
+                                    <button class="action-btn view-btn">عرض التقرير</button>
+                                </td>
+                            </tr>
+                            <tr data-type="coupons">
+                                <td data-label="اسم الحملة">SUMMER20</td>
+                                <td data-label="النوع">كود خصم</td>
+                                <td data-label="تاريخ الانتهاء">بلا تاريخ</td>
+                                <td data-label="الحالة">
+                                    <span class="status-badge completed-badge">نشط</span>
+                                </td>
+                                <td data-label="الأداء">2,100 رس</td>
+                                <td data-label="الإجراء">
+                                    <button class="action-btn edit-btn">تعديل</button>
+                                    <button class="action-btn stop-btn">إلغاء تفعيل</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+        
+        <div id="addCampaignModal" class="modal-overlay">
+            <div class="modal-content large-modal">
+                <span class="close-btn" onclick="closeCampaignModal()">&times;</span>
+                <h3>إنشاء حملة تسويقية جديدة</h3>
+                
+                <form class="campaign-form">
+                    <div class="card campaign-section">
+                        <h4>معلومات أساسية</h4>
+                        <div class="form-group">
+                            <label for="campaignName">اسم الحملة (للاستخدام الداخلي):</label>
+                            <input type="text" id="campaignName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="campaignType">نوع الحملة:</label>
+                            <select id="campaignType" required>
+                                <option value="discount_code">كود خصم (Coupon)</option>
+                                <option value="flash_sale">عرض تخفيض سريع (Flash Sale)</option>
+                                <option value="free_shipping">شحن مجاني</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="card campaign-section">
+                        <h4>تاريخ البدء والانتهاء</h4>
+                        <div class="form-row">
+                            <div class="form-group half-width">
+                                <label for="startDate">تاريخ البدء:</label>
+                                <input type="date" id="startDate" required>
+                            </div>
+                            <div class="form-group half-width">
+                                <label for="endDate">تاريخ الانتهاء (اختياري):</label>
+                                <input type="date" id="endDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card campaign-section" id="discountDetails">
+                        <h4>تفاصيل كود الخصم</h4>
+                        <div class="form-group">
+                            <label for="couponCode">كود الخصم (مثال: EID2026):</label>
+                            <input type="text" id="couponCode" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group third-width">
+                                <label for="discountValue">قيمة الخصم:</label>
+                                <input type="number" id="discountValue" min="1" required>
+                            </div>
+                            <div class="form-group third-width">
+                                <label for="discountType">نوع القيمة:</label>
+                                <select id="discountType">
+                                    <option value="percentage">% نسبة مئوية</option>
+                                    <option value="fixed_amount">مبلغ ثابت (رس)</option>
+                                </select>
+                            </div>
+                            <div class="form-group third-width">
+                                <label for="usageLimit">حد الاستخدام:</label>
+                                <input type="number" id="usageLimit" min="1" placeholder="عدد مرات الاستخدام">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="cancel-btn" onclick="closeCampaignModal()">إلغاء</button>
+                        <button type="submit" class="save-btn">حفظ وإطلاق الحملة</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // * وظائف النافذة المنبثقة (Modal) *
+        function openCampaignModal() {
+            document.getElementById('addCampaignModal').style.display = 'flex';
+        }
+
+        function closeCampaignModal() {
+            document.getElementById('addCampaignModal').style.display = 'none';
+            document.querySelector('.campaign-form').reset();
+        }
+        
+        // * فلترة تبويبات الحملات *
+        const campaignTabs = document.querySelectorAll('.campaign-tab');
+        const campaignRows = document.querySelectorAll('tbody tr');
+
+        campaignTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                campaignTabs.forEach(t => t.classList.remove('active-tab'));
+                this.classList.add('active-tab');
+
+                const selectedType = this.getAttribute('data-type');
+                filterCampaignsByType(selectedType);
+            });
+        });
+
+        function filterCampaignsByType(type) {
+            campaignRows.forEach(row => {
+                const rowType = row.getAttribute('data-type');
+
+                if (type === 'all' || rowType === type) {
+                    row.style.display = ''; 
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+        
+        // * محاكاة حفظ نموذج الحملة *
+        const campaignForm = document.querySelector('.campaign-form');
+
+        campaignForm.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            handleCampaignSubmission();
+        });
+
+        function handleCampaignSubmission() {
+            // جمع البيانات
+            const campaignData = {
+                name: document.getElementById('campaignName').value,
+                type: document.getElementById('campaignType').value,
+                startDate: document.getElementById('startDate').value,
+                // ... باقي البيانات
+            };
+
+            console.log("تم جمع بيانات الحملة:", campaignData);
+            simulateSaveCampaign(campaignData);
+        }
+
+        function simulateSaveCampaign(data) {
+            console.log("جاري محاكاة إطلاق الحملة...");
+            
+            setTimeout(() => {
+                alert(`✅ تم إطلاق الحملة "${data.name}" بنجاح!`);
+                closeCampaignModal();
+                // هنا يتم تحديث الجدول في التطبيق الحقيقي
+            }, 1200);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل الطلب #12345</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="logo">إدارة المتجر</div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li class="active"><a href="orders.html">الطلبات</a></li>
+                    </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <h2>📋 تفاصيل الطلب رقم #12345</h2>
+                <a href="orders.html" class="back-btn">← العودة للطلبات</a>
+            </header>
+
+            <div class="details-layout">
+                <div class="details-primary-column">
+                    
+                    <div class="card order-status-header">
+                        <div class="status-info">
+                            <span class="status-badge pending-badge">قيد المراجعة</span>
+                            <p>تاريخ الطلب: 2025/12/08 | تم الدفع عبر: Apple Pay</p>
+                        </div>
+                        <div class="status-actions">
+                            <select id="status-change-select" class="action-select">
+                                <option value="pending">قيد المراجعة</option>
+                                <option value="processing">تغيير إلى: قيد التجهيز</option>
+                                <option value="shipped">تغيير إلى: جاري الشحن</option>
+                                <option value="completed">تغيير إلى: مكتمل</option>
+                            </select>
+                            <button class="action-btn primary-action-btn">تحديث الحالة</button>
+                        </div>
+                    </div>
+
+                    <div class="card products-ordered-card">
+                        <h3>المنتجات المطلوبة (3 أصناف)</h3>
+                        <table class="products-table">
+                            <thead>
+                                <tr>
+                                    <th>المنتج</th>
+                                    <th>السعر</th>
+                                    <th>الكمية</th>
+                                    <th>الإجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ساعة رجالية هيرفو - A8</td>
+                                    <td>399.05 رس</td>
+                                    <td>2</td>
+                                    <td>798.10 رس</td>
+                                </tr>
+                                <tr>
+                                    <td>عطر الورد الفاخر</td>
+                                    <td>150.00 رس</td>
+                                    <td>1</td>
+                                    <td>150.00 رس</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <div class="order-summary-footer">
+                            <p>المجموع الفرعي: 948.10 رس</p>
+                            <p>رسوم الشحن: 30.00 رس</p>
+                            <h4 class="total-amount">الإجمالي الكلي: 978.10 رس</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details-secondary-column">
+                    
+                    <div class="card customer-info-card">
+                        <h3>معلومات العميل والشحن</h3>
+                        <p><strong>العميل:</strong> محمد فهد (ID: 504)</p>
+                        <p><strong>رقم الهاتف:</strong> 55xxxxxxx</p>
+                        <p><strong>العنوان:</strong> الرياض، حي النرجس، شارع رقم 34</p>
+                        <p><strong>شركة الشحن:</strong> Aramex</p>
+                        <p><strong>رقم التتبع:</strong> SA123456789</p>
+                    </div>
+
+                    <div class="card order-timeline-card">
+                        <h3>سجل الأحداث</h3>
+                        <ul class="timeline">
+                            <li>
+                                <span class="timeline-date">2025/12/08 10:00 ص</span>
+                                <p>تم إنشاء الطلب ودفع الفاتورة.</p>
+                            </li>
+                            <li>
+                                <span class="timeline-date">2025/12/08 11:30 ص</span>
+                                <p>تمت مراجعة الطلب ووضع علامة "قيد المراجعة".</p>
+                            </li>
+                            <li>
+                                <span class="timeline-date">حالياً</span>
+                                <p>بانتظار تغيير الحالة.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
